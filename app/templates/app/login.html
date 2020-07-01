@@ -1,0 +1,51 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}
+<title>Login</title>
+<link rel="stylesheet" href="{% static 'app/login.css'%}">
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-3">
+<div class="row">
+<form class="form-signin" method="post" action="{% url 'login' %}">
+    <img class="mb-4" src="{% static 'app/logo.svg'%}" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Вход</h1>
+    {% csrf_token %}
+    <div class="form-group">
+    <input type="text" class="form-control 
+        {% if form.username.errors or form.non_field_errors %}is-invalid{% endif %}" 
+        id="{{form.username.id_for_label}}" 
+        placeholder="Email или username"
+        name="{{form.username.html_name}}"
+        value="{{form.username.value|default_if_none:''}}"
+        required>
+    <div class="invalid-feedback">
+        {{form.username.errors}}
+    </div>
+    </div>
+    <div class="form-group">
+    <input type="password" class="form-control 
+        {% if form.password.errors or form.non_field_errors%}is-invalid{% endif %}" 
+        id="{{form.password.id_for_label}}" 
+        placeholder="Пароль"
+        name="{{form.password.html_name}}"
+        value=""
+        required>
+    <div class="invalid-feedback">
+        {{form.password.errors}}
+    </div>
+    </div>
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+    {% endfor %}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="btn btn-primary" type="submit">Войти</button>
+</form>
+</div>
+</div>
+{% endblock content %}
+{% block footer %}
+{% endblock footer %}

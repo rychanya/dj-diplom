@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" >
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block title %}
+    {% endblock title %}
+  <link rel="stylesheet" href="{% static 'app/bootstrap.min.css'%}">
+  <link rel="stylesheet" href="{% static 'app/main.css' %}">
+</head>
+<body class="{{box_center}}" data-gr-c-s-loaded="true">
+{% block navbar %}
+
+{% endblock navbar %}
+
+{% block content %}
+{% endblock content %}
+
+<hr>
+<footer class="container">
+{% block footer %}
+  <p>© Просто магазин 2018</p>
+{% endblock footer %}
+</footer>
+
+<script src="{% static 'app/jquery-3.3.1.slim.min.js'%}"></script>
+<script src="{%static 'app/popper.min.js'%}"></script>
+<script src="{% static 'app/bootstrap.min.js'%}"></script>
+</body>
+</html>
