@@ -1,5 +1,5 @@
 <form method="post" action="{% url 'cart' %}">
     {% csrf_token %}
     <input type="submit" class="btn btn-secondary" value="Добавить в корзину »">
-    <input type="hidden" valye="{{product.id}}">
+    <input type="hidden" value="{{product.id}}" name="product_id">
 </form>

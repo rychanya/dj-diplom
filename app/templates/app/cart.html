@@ -16,8 +16,13 @@
     <div class="col-lg-6 col-md-9 col-sm-12 order-md-2 mb-4">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">Ваша корзина</span>
-        <span class="badge badge-secondary badge-pill">{{count}}</span>
+        <span class="badge badge-secondary badge-pill">{{count|default_if_none:'Пуста'}}</span>
       </h4>
+      {% if add_message %}
+        <div class="alert alert-{% if add_message.valid %}success{% else %}danger{% endif %}" role="alert">
+          {{add_message.msg}}
+        </div>
+      {% endif %}
       <ul class="list-group mb-3">
         {% for iteam in cart_iteams %}
         <li class="list-group-item d-flex justify-content-between lh-condensed">
@@ -27,12 +32,15 @@
           </div>
           <span class="text-muted">{{iteam.count}}</span>
         </li>
+        {% empty %}
+        Вы пока ничего не добавили в корзину
         {% endfor %}
       </ul>
-
+      {% if cart_iteams %}
       <form class="card p-2">
         <button type="submit" class="btn btn-secondary">Заказать</button>
       </form>
+      {% endif %}
     </div>
   </div>
 

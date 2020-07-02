@@ -5,7 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from .models import Product, Compilation, Category, get_meny, Review, Cart, CartIteam
-from .forms import LoginForm
+from .forms import LoginForm, AddToCartForm
 
 # Create your views here.
 
@@ -67,13 +67,41 @@ def category_view(request):
 
 @login_required
 def cart(request):
+    cart, _ = Cart.objects.get_or_create(user=request.user)
     cart = Cart.objects.filter(user=request.user).first()
-    if cart:
-        cart_iteams = CartIteam.objects.select_related('product').filter(cart=cart).all()
-        count = CartIteam.get_sum_count(cart)
-    else:
-        cart_iteams = []
-        count = 0
+    add_message = None
+    if request.method == 'POST':
+        form = AddToCartForm(request.POST)
+        print(form.is_valid())
+        if form.is_valid():
+            product_id = form.cleaned_data['product_id']
+            product = Product.objects.filter(pk=product_id).first()
+            if product is not None:
+                cart_item, _ = CartIteam.objects.get_or_create(
+                    product=product,
+                    cart=cart,
+                    defaults={'count': 0}
+                )
+                cart_item.count += 1
+                cart_item.save()
+                add_message = {
+                    'msg': f'Товар {product.name} добавлен в корзину.',
+                    'valid': True
+                }
+            else:
+                add_message = {
+                'msg': 'Товар не добавлен в корзину.Товара нет в базе.',
+                'valid': False
+            }
+        else:
+            add_message = {
+                'msg': 'Товар не добавлен в корзину. ID товара невалидный.',
+                'valid': False
+            }
+
+    cart_iteams = CartIteam.objects.select_related('product').filter(cart=cart).all()
+    count = CartIteam.get_sum_count(cart)
+    
     return render(
         request,
         'app/cart.html',
@@ -81,6 +109,7 @@ def cart(request):
             'cart_iteams': cart_iteams,
             'count': count,
             'meny_iteams': get_meny(),
+            'add_message': add_message,
         }
     )
 
