@@ -10,6 +10,7 @@
 {% endblock navbar %}
 
 {% block content %}
+<div class="container">
   <div class="col-md-4">
     <h2>{{ product.name }}</h2>
     <img src="{{ product.image.url }}" width="180">
@@ -17,7 +18,7 @@
     {% include 'app/add-to-cart.html' %}
   </div>
   <hr>
-  <h3>Отзовы:</h3>
+  <h3>Отзывы:</h3>
   {% for review in reviews %}
     <div class="card">
       <div class="card-header">
@@ -28,7 +29,7 @@
             <img src="{%static 'app/star.svg'%}" alt="" width="18" height="18"> 
           {% endif %}
         {% endfor %}
-        <p>{{review.user}}</p>
+        {{review.user}}
       </div>
       <div class="card-body">
         {{review.text}}
@@ -39,6 +40,31 @@
       Пока отзывов нет      
     </div>
   {% endfor %}
-<hr>
-{{user.id}}
+  <form method="post" action="{% url 'product-detail' product.id %}">
+  <h3>Оставьте отзыв</h3>
+  {% csrf_token %}
+    {% if not user.is_authenticated %}
+    <div class="form-group">
+      <label for="{{form.user.id_for_label}}">Имя:</label>
+      <input type="text" class="form-control" id="{{form.user.id_for_label}}" name="user" required>
+    </div>
+    {% else %}
+      <input type="hidden" id="{{form.user.id_for_label}}" name="user" required value="{{user.username}}">
+    {% endif %}
+    <div class="form-group">
+      <label for="{{form.text.id_for_label}}">Текст отзыва:</label>
+      <textarea type="text" class="form-control" id="{{form.text.id_for_label}}" name="text" rows=3 required></textarea>
+    </div>
+  <label for="{{form.rating.id_for_label}}">Оценка:</label>
+  {% for radio in form.rating %}
+    <div class="form-check form-check-inline">
+      {{ radio }}
+    </div>
+{% endfor %}
+    <div class="form-group">
+  <button type="submit" class="btn btn-primary">Оставить</button>
+  </div>
+  <input type="hidden" value={{product.id}} name="product">
+  </form>
+</div>
 {% endblock content %}

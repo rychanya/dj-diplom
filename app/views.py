@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from .models import Product, Compilation, Category, get_meny, Review, Cart, CartIteam
-from .forms import LoginForm, AddToCartForm
+from .models import Product, Compilation, Category, get_meny, Review, Cart, CartIteam, Order, OrderIteam
+from .forms import LoginForm, AddToCartForm, OderForm, ReviewForm
 
 # Create your views here.
 
@@ -15,15 +15,27 @@ def home(request):
         request,
         'app/index.html',
         context={
-            'products': Product.objects.all(),
             'compilations': Compilation.objects.order_by('-create_date').prefetch_related('products').all(),
             'meny_iteams': get_meny(),
         }
     )
 
 def product(request, id=None):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            product = Product.objects.filter(pk=form.cleaned_data['product']).first()
+            if product is not None:
+                Review.objects.create(
+                    product=product,
+                    user=form.cleaned_data['user'],
+                    text=form.cleaned_data['text'],
+                    rating=form.cleaned_data['rating'],
+                )
+            return redirect('product-detail', product.id)
     product = get_object_or_404(Product, pk=id)
     reviews = Review.objects.filter(product=product).all()
+    form = ReviewForm()
     return render(
         request,
         'app/product_detail.html',
@@ -32,6 +44,7 @@ def product(request, id=None):
             'meny_iteams': get_meny(),
             'reviews': reviews,
             'stars': list(range(1,6)),
+            'form': form,
         }
     )
 
@@ -39,7 +52,7 @@ def category_view(request):
     category = get_object_or_404(Category, pk=request.GET.get('category'))
     products = Product.objects.filter(category=category).all()
 
-    paginator = Paginator(products, 5)
+    paginator = Paginator(products, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -68,7 +81,6 @@ def category_view(request):
 @login_required
 def cart(request):
     cart, _ = Cart.objects.get_or_create(user=request.user)
-    cart = Cart.objects.filter(user=request.user).first()
     add_message = None
     if request.method == 'POST':
         form = AddToCartForm(request.POST)
@@ -110,6 +122,7 @@ def cart(request):
             'count': count,
             'meny_iteams': get_meny(),
             'add_message': add_message,
+            'cart_id': cart.id
         }
     )
 
@@ -143,3 +156,22 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+@login_required
+def order_view(requeest):
+    if requeest.method == 'POST':
+        form = OderForm(requeest.POST)
+        if form.is_valid():
+            cart_id = form.cleaned_data['cart_id']
+            cart = Cart.objects.filter(pk=cart_id).first()
+            if cart is not None and cart.user == requeest.user:
+                order = Order.objects.create(user=cart.user)
+                for iteam in CartIteam.objects.select_related('product').filter(cart=cart).all():
+                    OrderIteam.objects.create(
+                        product=iteam.product,
+                        count=iteam.count,
+                        order=order
+                    )
+                cart.delete()
+                
+    return redirect('cart')

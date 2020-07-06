@@ -11,7 +11,9 @@
 {% endblock navbar %}
 
 {% block content %}
+<div class="container">
     <h2>{{category.name}}</h2>
+    <div class="row">
     {% for product in products %}
         {% include 'app/product.html' %}
     {% empty %}
@@ -19,6 +21,8 @@
             Тут пока ничего нет!
         </div>
     {% endfor %}
+    </div>
+</div>
 
     {% if products.has_other_pages %}
     <nav aria-label="Page navigation">

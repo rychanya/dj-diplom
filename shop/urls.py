@@ -25,7 +25,8 @@ urlpatterns = [
     path('category/', app_views.category_view, name='category'),
     path('cart/', app_views.cart, name='cart'),
     path('login/', app_views.login_view, name='login'),
-    path('logout/', app_views.logout_view, name='logout')
+    path('logout/', app_views.logout_view, name='logout'),
+    path('order/', app_views.order_view, name='order')
 ]
 
 if settings.DEBUG:
