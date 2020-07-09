@@ -7,11 +7,11 @@
 
 
 {% block navbar %}
-  {% include  'app/navbar.html' %}
+{% include  'app/navbar.html' %}
 {% endblock navbar %}
 
 {% block content %}
-  {% for compilation in compilations %}
-    {% include 'app/compilation.html' %}
-  {% endfor %}
+{% for compilation in compilations %}
+{% include 'app/compilation.html' %}
+{% endfor %}
 {% endblock content %}

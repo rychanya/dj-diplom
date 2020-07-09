@@ -1,7 +1,7 @@
 <div class="col-md-4">
-    <h2>{{ product.name }}</h2>
-        <a href="{% url 'product-detail' product.id %}">
-          <img src="{{ product.image.url }}" width="180">
-        </a>
-        {% include 'app/add-to-cart.html' %}
+  <h2>{{ product.name }}</h2>
+  <a href="{% url 'product-detail' product.id %}">
+    <img src="{{ product.image.url }}" width="180">
+  </a>
+  {% include 'app/add-to-cart.html' %}
 </div>

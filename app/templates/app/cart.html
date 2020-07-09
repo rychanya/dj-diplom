@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block title %}
-    <title>Корзина</title>
+<title>Корзина</title>
 {% endblock title %}
 
 {% block navbar %}
-    {% include  'app/navbar.html' %}
+{% include  'app/navbar.html' %}
 {% endblock navbar %}
 
 {% block content %}
@@ -19,9 +19,9 @@
         <span class="badge badge-secondary badge-pill">{{count|default_if_none:'Пуста'}}</span>
       </h4>
       {% if add_message %}
-        <div class="alert alert-{% if add_message.valid %}success{% else %}danger{% endif %}" role="alert">
-          {{add_message.msg}}
-        </div>
+      <div class="alert alert-{% if add_message.valid %}success{% else %}danger{% endif %}" role="alert">
+        {{add_message.msg}}
+      </div>
       {% endif %}
       <ul class="list-group mb-3">
         {% for iteam in cart_iteams %}
@@ -38,9 +38,9 @@
       </ul>
       {% if cart_iteams %}
       <form class="card p-2" action={% url 'order' %} method="post">
-      {% csrf_token %}
+        {% csrf_token %}
         <button type="submit" class="btn btn-secondary">Заказать</button>
-        <input type="hidden" value="{{cart_id}}" name="cart_id"> 
+        <input type="hidden" value="{{cart_id}}" name="cart_id">
       </form>
       {% endif %}
     </div>

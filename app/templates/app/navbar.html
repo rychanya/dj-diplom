@@ -2,9 +2,8 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
   <a class="navbar-brand" href="{% url 'home' %}">Просто магазин</a>
   <img src="{%static 'app/logo.svg'%}" alt="" width="42" height="42">
-  <button class="navbar-toggler" type="button" data-toggle="collapse"
-          data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
-          aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+    aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -16,46 +15,43 @@
       </li>
 
       {% for meny_iteam in meny_iteams %}
-        {% if meny_iteam.content.category %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'category' %}?category={{meny_iteam.content.id}}">
-            {{ meny_iteam.content.name }}
-            </a>
-           </li>
-        {% else %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown{{meny_iteam.content.id}}"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{ meny_iteam.content.name }}
-            </a>
-              <div class="dropdown-menu" aria-labelledby="dropdown{{meny_iteam.content.id}}">
-              {% for drop_iteam in meny_iteam.content.categoryhub.items.all %}
-                <a class="dropdown-item" href="{% url 'category' %}?category={{drop_iteam.id}}">
-                  {{drop_iteam.name}}
-                </a>
-              {% endfor %}
-              </div>
-              
-          </li>
-        {% endif %}
-      {% endfor %} 
+      {% if meny_iteam.content.category %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'category' %}?category={{meny_iteam.content.id}}">
+          {{ meny_iteam.content.name }}
+        </a>
+      </li>
+      {% else %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown{{meny_iteam.content.id}}" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          {{ meny_iteam.content.name }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdown{{meny_iteam.content.id}}">
+          {% for drop_iteam in meny_iteam.content.categoryhub.items.all %}
+          <a class="dropdown-item" href="{% url 'category' %}?category={{drop_iteam.id}}">
+            {{drop_iteam.name}}
+          </a>
+          {% endfor %}
+        </div>
+
+      </li>
+      {% endif %}
+      {% endfor %}
 
 
     </ul>
-    <a class="btn btn-outline-success my-2 my-sm-0" role="button"
-       href="{% url 'cart' %}">
+    <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'cart' %}">
       Корзина</a>
 
     {% if user.is_authenticated %}
-    <a class="btn btn-outline-success my-2 my-sm-0" role="button"
-       href="{% url 'logout' %}">
+    <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'logout' %}">
       Выйти</a>
     {% else %}
-    <a class="btn btn-outline-success my-2 my-sm-0" role="button"
-       href="{% url 'login' %}">
+    <a class="btn btn-outline-success my-2 my-sm-0" role="button" href="{% url 'login' %}">
       Войти</a>
     {% endif %}
-    
+
 
   </div>
 </nav>
