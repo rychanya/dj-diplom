@@ -13,23 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path
+
 from app import views as app_views
-from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', app_views.home, name='home'),
-    path('product/<int:id>',app_views.product, name='product-detail'),
-    path('category/', app_views.category_view, name='category'),
-    path('cart/', app_views.cart, name='cart'),
-    path('login/', app_views.login_view, name='login'),
-    path('logout/', app_views.logout_view, name='logout'),
-    path('order/', app_views.order_view, name='order')
+    path("admin/", admin.site.urls),
+    path("", app_views.home, name="home"),
+    path("product/<int:id>", app_views.product, name="product-detail"),
+    path("category/", app_views.category_view, name="category"),
+    path("cart/", app_views.cart, name="cart"),
+    path("login/", app_views.login_view, name="login"),
+    path("logout/", app_views.logout_view, name="logout"),
+    path("siginup/", app_views.siginup_view, name="siginup"),
+    path("order/", app_views.order_view, name="order"),
 ]
 
 if settings.DEBUG:
     from django.conf.urls.static import static
-    urlpatterns = urlpatterns +\
-        static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    urlpatterns = urlpatterns + static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

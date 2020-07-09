@@ -1,0 +1,23 @@
+{% if input_tag %}
+<{{input_tag}}
+{% else %}
+<input
+{% endif %}
+type="{{input_type}}" class="form-control 
+{% if input_field.errors or form.non_field_errors%}is-invalid{% endif %}" 
+id="{{input_field.id_for_label}}" 
+placeholder="{{input_placeholder}}"
+name="{{input_field.html_name}}"
+{% if input_type == 'password' %}
+value=""
+{% else %}
+value="{{input_field.value|default_if_none:''}}"
+{% endif %}
+required
+>
+{% if input_tag == 'textarea' %}
+</textarea>
+{% endif %}
+<div class="invalid-feedback">
+    {{input_field.errors}}
+</div>

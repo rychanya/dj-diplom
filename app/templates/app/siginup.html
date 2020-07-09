@@ -1,0 +1,28 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}
+<title>Siginup</title>
+<link rel="stylesheet" href="{% static 'app/login.css'%}">
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-3">
+<div class="row">
+<form class="form-signin" method="post" action="{% url 'siginup' %}">
+<img class="mb-4" src="{% static 'app/logo.svg'%}" alt="" width="72" height="72">
+<h1 class="h3 mb-3 font-weight-normal">Вход</h1>
+{% csrf_token %}
+{% include 'app/forms/input.html' with input_tag='input' input_field=form.username input_type='text' input_placeholder='Имя' %}
+{% include 'app/forms/input.html' with input_tag='input' input_field=form.email input_type='email' input_placeholder='Почта' %}
+{% include 'app/forms/input.html' with input_tag='input' input_field=form.password input_type='password' input_placeholder='Пароль' %}
+{% include 'app/forms/errors.html' %}
+<input type="hidden" name="next" value="{{ next }}">
+<button class="btn btn-primary" type="submit">Зарегестрироваться</button>
+или
+<a class="btn btn-primary" role="button" href="{% url 'login' %}?next={{next}}">Войти</a>
+</form>
+</div>
+</div>
+{% endblock content %}
+{% block footer %}
+{% endblock footer %}
