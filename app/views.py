@@ -26,7 +26,6 @@ def home(request):
             "compilations": Compilation.objects.order_by("-create_date")
             .prefetch_related("products")
             .all(),
-            "meny_iteams": Menu.objects.all(),
         },
     )
 
@@ -52,7 +51,6 @@ def product(request, id=None):
         "app/product_detail.html",
         context={
             "product": product,
-            "meny_iteams": Menu.objects.all(),
             "reviews": reviews,
             "stars": list(range(1, 6)),
             "form": form,
@@ -86,7 +84,6 @@ def category_view(request):
             "products": page_obj,
             "skip_left": skip_left,
             "skip_right": skip_right,
-            "meny_iteams": Menu.objects.all(),
         },
     )
 
@@ -131,7 +128,6 @@ def cart(request):
         context={
             "cart_iteams": cart_iteams,
             "count": count,
-            "meny_iteams": Menu.objects.all(),
             "add_message": add_message,
             "cart_id": cart.id,
         },
